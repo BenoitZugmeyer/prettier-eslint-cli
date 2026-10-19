@@ -6,20 +6,19 @@ CLI for [`prettier-eslint`][prettier-eslint]
 [![Code Coverage][coverage-badge]][coverage]
 [![version][version-badge]][package]
 [![downloads][downloads-badge]][npm-stat]
-[![MIT License][license-badge]][LICENSE]
+[![MIT License][license-badge]][license]
+[![changesets](https://img.shields.io/badge/maintained%20with-changesets-176de3.svg?style=flat-square)](https://github.com/atlassian/changesets)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-19-orange.svg?style=flat-square)](#contributors)
+[![Open Collective backers and sponsors](https://img.shields.io/opencollective/all/prettier-eslint?style=flat-square)](https://opencollective.com/prettier-eslint)
+[![All Contributors](https://img.shields.io/badge/all_contributors-21-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome][prs-badge]][prs]
 [![Donate][donate-badge]][donate]
 [![Code of Conduct][coc-badge]][coc]
 [![Roadmap][roadmap-badge]][roadmap]
-[![Examples][examples-badge]][examples]
 
 [![Watch on GitHub][github-watch-badge]][github-watch]
 [![Star on GitHub][github-star-badge]][github-star]
 [![Tweet][twitter-badge]][twitter]
-
-<a href="https://app.codesponsor.io/link/PKGFLnhDiFvsUA5P4kAXfiPs/prettier/prettier-eslint-cli" rel="nofollow"><img src="https://app.codesponsor.io/embed/PKGFLnhDiFvsUA5P4kAXfiPs/prettier/prettier-eslint-cli.svg" style="width: 888px; height: 68px;" alt="Sponsor" /></a>
 
 ## The problem
 
@@ -89,20 +88,25 @@ Options:
                                                       [boolean] [default: false]
   --stdin                  Read input via stdin       [boolean] [default: false]
   --stdin-filepath         Path to the file to pretend that stdin comes from.
-  --eslint-ignore          Only format matching files even if they are not
-                           ignored by .eslintignore. (can use --no-eslint-ignore
-                           to disable this)            [boolean] [default: true]
+  --eslint-ignore          Only format matching files when they are not ignored
+                           by ESLint config or default ignores. (can use
+                           --no-eslint-ignore to disable this)            [boolean] [default: true]
+  --prettier-ignore        Only format matching files even if they are not
+                           ignored by .prettierignore. (can use
+                           --no-prettier-ignore to disable this)
+                                                       [boolean] [default: true]
   --list-different         Print filenames of files that are different from
                            Prettier + Eslint formatting.
+                                                      [boolean] [default: false]
+  --include-dot-files      Include files that start with a dot in the search.
                                                       [boolean] [default: false]
   --eslint-path            The path to the eslint module to use
                  [default: "./node_modules/eslint"]
   --eslint-config-path     Path to the eslint config to use for eslint --fix
-  --prettier-path          The path to the prettier module to use
+  --prettier-path          The path to the prettier module to use [default: "./node_modules/prettier"]
   --config                 Path to the prettier config
-               [default: "./node_modules/prettier"]
-  --ignore                 pattern(s) you wish to ignore (can be used multiple
-                           times and includes **/node_modules/** automatically)
+  --ignore                 ESLint-style pattern(s) you wish to ignore (can be
+                           used multiple times)
   --log-level, -l          The log level to use
         [choices: "silent", "error", "warn", "info", "debug", "trace"] [default:
                                                                          "warn"]
@@ -144,9 +148,7 @@ Options:
 
 #### <globs>
 
-Any number of [globs][glob] you wish to use to match the files you wish to format. By default, `glob` will ignore
-`**/node_modules/**` unless the glob you provide
-includes the string `node_modules`.
+Any number of [globs][glob] you wish to use to match the files you wish to format. ESLint's default ignores are applied, so `node_modules/` and `.git/` entries are skipped unless you explicitly unignore them with `--ignore` negation patterns such as `--ignore '!**/node_modules/'`.
 
 #### --write
 
@@ -196,9 +198,11 @@ Forwarded as `logLevel` option to `prettier-eslint`
 
 #### --no-eslint-ignore
 
-Disables application of `.eslintignore` to the files resolved from the glob. By
-default, `prettier-eslint-cli` will exclude files if they are matched by a
-`.eslintignore`. Add this flag to disable this behavior.
+Disables ESLint config and default ignores for files resolved from the glob. By
+default, `prettier-eslint-cli` excludes files matched by ESLint config ignores,
+plus default ignores like `node_modules/` and `.git/`. Use ESLint-style `--ignore`
+negation patterns such as `--ignore '!**/node_modules/'` to unignore specific
+paths without disabling all ESLint ignore handling.
 
 > Note: You can also set the `LOG_LEVEL` environment variable to control logging in `prettier-eslint`
 
@@ -217,7 +221,7 @@ use `eslint` to look for bugs and/or bad practices, and use `prettier` to enforc
 
 For example: `prettier-eslint --trailing-comma es5`
 
-Refer to the  [prettier-eslint](https://github.com/prettier/prettier#options) docs for documentation on these options
+Refer to the [prettier-eslint](https://github.com/prettier/prettier#options) docs for documentation on these options
 
 ## Integration
 
@@ -243,10 +247,55 @@ Any linter that support ESLint [CLIEngine](http://eslint.org/docs/developer-guid
 Thanks goes to these people ([emoji key][emojis]):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars.githubusercontent.com/u/1500684?v=3" width="100px;"/><br /><sub>Kent C. Dodds</sub>](https://kentcdodds.com)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=kentcdodds "Code") [📖](https://github.com/prettier/prettier-eslint-cli/commits?author=kentcdodds "Documentation") [🚇](#infra-kentcdodds "Infrastructure (Hosting, Build-Tools, etc)") [⚠️](https://github.com/prettier/prettier-eslint-cli/commits?author=kentcdodds "Tests") | [<img src="https://avatars3.githubusercontent.com/u/3266363?v=3" width="100px;"/><br /><sub>Adam Harris</sub>](https://github.com/aharris88)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=aharris88 "Code") [📖](https://github.com/prettier/prettier-eslint-cli/commits?author=aharris88 "Documentation") [👀](#review-aharris88 "Reviewed Pull Requests") | [<img src="https://avatars.githubusercontent.com/u/622118?v=3" width="100px;"/><br /><sub>Eric McCormick</sub>](https://ericmccormick.io)<br />[👀](#review-edm00se "Reviewed Pull Requests") | [<img src="https://avatars.githubusercontent.com/u/12389411?v=3" width="100px;"/><br /><sub>Joel Sequeira</sub>](https://github.com/joelseq)<br />[📖](https://github.com/prettier/prettier-eslint-cli/commits?author=joelseq "Documentation") | [<img src="https://avatars.githubusercontent.com/u/103008?v=3" width="100px;"/><br /><sub>Frank Taillandier</sub>](https://frank.taillandier.me)<br /> | [<img src="https://avatars3.githubusercontent.com/u/292365?v=3" width="100px;"/><br /><sub>Adam Stankiewicz</sub>](http://sheerun.net)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=sheerun "Code") | [<img src="https://avatars3.githubusercontent.com/u/487068?v=3" width="100px;"/><br /><sub>Stephen John Sorensen</sub>](http://www.stephenjohnsorensen.com/)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=spudly "Code") |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| [<img src="https://avatars0.githubusercontent.com/u/11560964?v=3" width="100px;"/><br /><sub>Gandem</sub>](https://github.com/Gandem)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=Gandem "Code") [⚠️](https://github.com/prettier/prettier-eslint-cli/commits?author=Gandem "Tests") | [<img src="https://avatars0.githubusercontent.com/u/129991?v=3" width="100px;"/><br /><sub>Matteo Ronchi</sub>](https://github.com/cef62)<br />[🐛](https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Acef62 "Bug reports") [💻](https://github.com/prettier/prettier-eslint-cli/commits?author=cef62 "Code") | [<img src="https://avatars2.githubusercontent.com/u/61787?v=3" width="100px;"/><br /><sub>Benoît Zugmeyer</sub>](https://github.com/BenoitZugmeyer)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=BenoitZugmeyer "Code") [⚠️](https://github.com/prettier/prettier-eslint-cli/commits?author=BenoitZugmeyer "Tests") | [<img src="https://avatars0.githubusercontent.com/u/5038030?v=3" width="100px;"/><br /><sub>Charlike Mike Reagent</sub>](https://i.am.charlike.online)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=tunnckoCore "Code") [⚠️](https://github.com/prettier/prettier-eslint-cli/commits?author=tunnckoCore "Tests") | [<img src="https://avatars0.githubusercontent.com/u/10954870?v=3" width="100px;"/><br /><sub>Dion Dirza</sub>](https://github.com/diondirza)<br />[🐛](https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Adiondirza "Bug reports") | [<img src="https://avatars0.githubusercontent.com/u/3297808?v=3" width="100px;"/><br /><sub>mrm007</sub>](https://github.com/mrm007)<br />[🐛](https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Amrm007 "Bug reports") [💻](https://github.com/prettier/prettier-eslint-cli/commits?author=mrm007 "Code") | [<img src="https://avatars0.githubusercontent.com/u/193238?v=3" width="100px;"/><br /><sub>Jack Franklin</sub>](http://www.jackfranklin.co.uk)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=jackfranklin "Code") |
-| [<img src="https://avatars0.githubusercontent.com/u/17342435?v=3" width="100px;"/><br /><sub>Ryan Zimmerman</sub>](http://www.ryanzim.com)<br />[📖](https://github.com/prettier/prettier-eslint-cli/commits?author=RyanZim "Documentation") | [<img src="https://avatars3.githubusercontent.com/u/1186409?v=3" width="100px;"/><br /><sub>Paolo Moretti</sub>](http://stackoverflow.com/users/63011)<br />[🐛](https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Amoretti "Bug reports") [💻](https://github.com/prettier/prettier-eslint-cli/commits?author=moretti "Code") [⚠️](https://github.com/prettier/prettier-eslint-cli/commits?author=moretti "Tests") | [<img src="https://avatars0.githubusercontent.com/u/6242574?v=3" width="100px;"/><br /><sub>bySabi Files</sub>](https://github.com/bySabi)<br />[📖](https://github.com/prettier/prettier-eslint-cli/commits?author=bySabi "Documentation") [🔧](#tool-bySabi "Tools") | [<img src="https://avatars1.githubusercontent.com/u/554231?v=4" width="100px;"/><br /><sub>Pavel Pertsev</sub>](http://morhetz.com)<br />[💻](https://github.com/prettier/prettier-eslint-cli/commits?author=morhetz "Code") [⚠️](https://github.com/prettier/prettier-eslint-cli/commits?author=morhetz "Tests") | [<img src="https://avatars3.githubusercontent.com/u/13577271?v=4" width="100px;"/><br /><sub>Josh English</sub>](http://www.joshenglish.com)<br />[⚠️](https://github.com/prettier/prettier-eslint-cli/commits?author=jmenglis "Tests") [🐛](https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Ajmenglis "Bug reports") [💻](https://github.com/prettier/prettier-eslint-cli/commits?author=jmenglis "Code") [🔌](#plugin-jmenglis "Plugin/utility libraries") |
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://kentcdodds.com"><img src="https://avatars.githubusercontent.com/u/1500684?v=3?s=100" width="100px;" alt="Kent C. Dodds"/><br /><sub><b>Kent C. Dodds</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=kentcdodds" title="Code">💻</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=kentcdodds" title="Documentation">📖</a> <a href="#infra-kentcdodds" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=kentcdodds" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/aharris88"><img src="https://avatars3.githubusercontent.com/u/3266363?v=3?s=100" width="100px;" alt="Adam Harris"/><br /><sub><b>Adam Harris</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=aharris88" title="Code">💻</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=aharris88" title="Documentation">📖</a> <a href="https://github.com/prettier/prettier-eslint-cli/pulls?q=is%3Apr+reviewed-by%3Aaharris88" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://ericmccormick.io"><img src="https://avatars.githubusercontent.com/u/622118?v=3?s=100" width="100px;" alt="Eric McCormick"/><br /><sub><b>Eric McCormick</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/pulls?q=is%3Apr+reviewed-by%3Aedm00se" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/joelseq"><img src="https://avatars.githubusercontent.com/u/12389411?v=3?s=100" width="100px;" alt="Joel Sequeira"/><br /><sub><b>Joel Sequeira</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=joelseq" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://frank.taillandier.me"><img src="https://avatars.githubusercontent.com/u/103008?v=3?s=100" width="100px;" alt="Frank Taillandier"/><br /><sub><b>Frank Taillandier</b></sub></a><br /></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://sheerun.net"><img src="https://avatars3.githubusercontent.com/u/292365?v=3?s=100" width="100px;" alt="Adam Stankiewicz"/><br /><sub><b>Adam Stankiewicz</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=sheerun" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.stephenjohnsorensen.com/"><img src="https://avatars3.githubusercontent.com/u/487068?v=3?s=100" width="100px;" alt="Stephen John Sorensen"/><br /><sub><b>Stephen John Sorensen</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=spudly" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Gandem"><img src="https://avatars0.githubusercontent.com/u/11560964?v=3?s=100" width="100px;" alt="Gandem"/><br /><sub><b>Gandem</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=Gandem" title="Code">💻</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=Gandem" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/cef62"><img src="https://avatars0.githubusercontent.com/u/129991?v=3?s=100" width="100px;" alt="Matteo Ronchi"/><br /><sub><b>Matteo Ronchi</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Acef62" title="Bug reports">🐛</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=cef62" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/BenoitZugmeyer"><img src="https://avatars2.githubusercontent.com/u/61787?v=3?s=100" width="100px;" alt="Benoît Zugmeyer"/><br /><sub><b>Benoît Zugmeyer</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=BenoitZugmeyer" title="Code">💻</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=BenoitZugmeyer" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://i.am.charlike.online"><img src="https://avatars0.githubusercontent.com/u/5038030?v=3?s=100" width="100px;" alt="Charlike Mike Reagent"/><br /><sub><b>Charlike Mike Reagent</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=tunnckoCore" title="Code">💻</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=tunnckoCore" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/diondirza"><img src="https://avatars0.githubusercontent.com/u/10954870?v=3?s=100" width="100px;" alt="Dion Dirza"/><br /><sub><b>Dion Dirza</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Adiondirza" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mrm007"><img src="https://avatars0.githubusercontent.com/u/3297808?v=3?s=100" width="100px;" alt="mrm007"/><br /><sub><b>mrm007</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Amrm007" title="Bug reports">🐛</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=mrm007" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.jackfranklin.co.uk"><img src="https://avatars0.githubusercontent.com/u/193238?v=3?s=100" width="100px;" alt="Jack Franklin"/><br /><sub><b>Jack Franklin</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=jackfranklin" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.ryanzim.com"><img src="https://avatars0.githubusercontent.com/u/17342435?v=3?s=100" width="100px;" alt="Ryan Zimmerman"/><br /><sub><b>Ryan Zimmerman</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=RyanZim" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://stackoverflow.com/users/63011"><img src="https://avatars3.githubusercontent.com/u/1186409?v=3?s=100" width="100px;" alt="Paolo Moretti"/><br /><sub><b>Paolo Moretti</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Amoretti" title="Bug reports">🐛</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=moretti" title="Code">💻</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=moretti" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/bySabi"><img src="https://avatars0.githubusercontent.com/u/6242574?v=3?s=100" width="100px;" alt="bySabi Files"/><br /><sub><b>bySabi Files</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=bySabi" title="Documentation">📖</a> <a href="#tool-bySabi" title="Tools">🔧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://morhetz.com"><img src="https://avatars1.githubusercontent.com/u/554231?v=4?s=100" width="100px;" alt="Pavel Pertsev"/><br /><sub><b>Pavel Pertsev</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=morhetz" title="Code">💻</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=morhetz" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.joshenglish.com"><img src="https://avatars3.githubusercontent.com/u/13577271?v=4?s=100" width="100px;" alt="Josh English"/><br /><sub><b>Josh English</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=jmenglis" title="Tests">⚠️</a> <a href="https://github.com/prettier/prettier-eslint-cli/issues?q=author%3Ajmenglis" title="Bug reports">🐛</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=jmenglis" title="Code">💻</a> <a href="#plugin-jmenglis" title="Plugin/utility libraries">🔌</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://disquisition.net"><img src="https://avatars2.githubusercontent.com/u/1706502?v=4?s=100" width="100px;" alt="Spenser Isdahl"/><br /><sub><b>Spenser Isdahl</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=disquisition" title="Code">💻</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=disquisition" title="Documentation">📖</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=disquisition" title="Tests">⚠️</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/bj00rn"><img src="https://avatars0.githubusercontent.com/u/10961167?v=4?s=100" width="100px;" alt="Björn Dalfors"/><br /><sub><b>Björn Dalfors</b></sub></a><br /><a href="#infra-bj00rn" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sscaff1"><img src="https://avatars1.githubusercontent.com/u/1554424?v=4?s=100" width="100px;" alt="Steven Scaffidi"/><br /><sub><b>Steven Scaffidi</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=sscaff1" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://danielwilhelmsen.com"><img src="https://avatars3.githubusercontent.com/u/1758049?v=4?s=100" width="100px;" alt="Daniel Wilhelmsen"/><br /><sub><b>Daniel Wilhelmsen</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=dpwilhelmsen" title="Code">💻</a> <a href="#maintenance-dpwilhelmsen" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gwhitney"><img src="https://avatars.githubusercontent.com/u/3825429?v=4?s=100" width="100px;" alt="Glen Whitney"/><br /><sub><b>Glen Whitney</b></sub></a><br /><a href="#maintenance-gwhitney" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://campcode.dev/"><img src="https://avatars.githubusercontent.com/u/10620169?v=4?s=100" width="100px;" alt="Rebecca Vest"/><br /><sub><b>Rebecca Vest</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=idahogurl" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.1stg.me/"><img src="https://avatars.githubusercontent.com/u/8336744?v=4?s=100" width="100px;" alt="JounQin"/><br /><sub><b>JounQin</b></sub></a><br /><a href="#question-JounQin" title="Answering Questions">💬</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=JounQin" title="Code">💻</a> <a href="#design-JounQin" title="Design">🎨</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=JounQin" title="Documentation">📖</a> <a href="#ideas-JounQin" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-JounQin" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#maintenance-JounQin" title="Maintenance">🚧</a> <a href="#plugin-JounQin" title="Plugin/utility libraries">🔌</a> <a href="#projectManagement-JounQin" title="Project Management">📆</a> <a href="https://github.com/prettier/prettier-eslint-cli/pulls?q=is%3Apr+reviewed-by%3AJounQin" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/prettier/prettier-eslint-cli/commits?author=JounQin" title="Tests">⚠️</a> <a href="#tool-JounQin" title="Tools">🔧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/dorser"><img src="https://avatars2.githubusercontent.com/u/20969462?v=4?s=100" width="100px;" alt="dorser"/><br /><sub><b>dorser</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=dorser" title="Code">💻</a> <a href="#maintenance-dorser" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://qwq.cat"><img src="https://avatars2.githubusercontent.com/u/20062482?v=4?s=100" width="100px;" alt="さくら"/><br /><sub><b>さくら</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=u3u" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/outslept"><img src="https://avatars.githubusercontent.com/u/135520429?v=4?s=100" width="100px;" alt="outslept"/><br /><sub><b>outslept</b></sub></a><br /><a href="https://github.com/prettier/prettier-eslint-cli/commits?author=outslept" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors][all-contributors] specification. Contributions of any kind welcome!
@@ -258,8 +307,8 @@ MIT
 [yarn]: https://yarnpkg.com/
 [npm]: https://www.npmjs.com/
 [node]: https://nodejs.org
-[build-badge]: https://img.shields.io/travis/prettier/prettier-eslint-cli.svg?style=flat-square
-[build]: https://travis-ci.org/prettier/prettier-eslint-cli
+[build-badge]: https://img.shields.io/github/actions/workflow/status/prettier/prettier-eslint-cli/ci.yml?style=flat-square
+[build]: https://github.com/prettier/prettier-eslint-cli/actions/workflows/ci.yml
 [coverage-badge]: https://img.shields.io/codecov/c/github/prettier/prettier-eslint-cli.svg?style=flat-square
 [coverage]: https://codecov.io/github/prettier/prettier-eslint-cli
 [version-badge]: https://img.shields.io/npm/v/prettier-eslint-cli.svg?style=flat-square
@@ -267,17 +316,15 @@ MIT
 [downloads-badge]: https://img.shields.io/npm/dm/prettier-eslint-cli.svg?style=flat-square
 [npm-stat]: http://npm-stat.com/charts.html?package=prettier-eslint-cli&from=2016-04-01
 [license-badge]: https://img.shields.io/npm/l/prettier-eslint-cli.svg?style=flat-square
-[license]: https://github.com/prettier/prettier-eslint-cli/blob/master/other/LICENSE
+[license]: https://github.com/prettier/prettier-eslint-cli/blob/master/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [prs]: http://makeapullrequest.com
 [donate-badge]: https://img.shields.io/badge/$-support-green.svg?style=flat-square
-[donate]: https://www.paypal.me/zimme
+[donate]: https://github.com/sponsors/prettier-eslint
 [coc-badge]: https://img.shields.io/badge/code%20of-conduct-ff69b4.svg?style=flat-square
-[coc]: https://github.com/prettier/prettier-eslint-cli/blob/master/other/CODE_OF_CONDUCT.md
+[coc]: https://github.com/prettier/prettier-eslint-cli/blob/master/CODE_OF_CONDUCT.md
 [roadmap-badge]: https://img.shields.io/badge/%F0%9F%93%94-roadmap-CD9523.svg?style=flat-square
-[roadmap]: https://github.com/prettier/prettier-eslint-cli/blob/master/other/ROADMAP.md
-[examples-badge]: https://img.shields.io/badge/%F0%9F%92%A1-examples-8C8E93.svg?style=flat-square
-[examples]: https://github.com/prettier/prettier-eslint-cli/blob/master/other/EXAMPLES.md
+[roadmap]: https://github.com/prettier/prettier-eslint-cli/blob/master/ROADMAP.md
 [github-watch-badge]: https://img.shields.io/github/watchers/prettier/prettier-eslint-cli.svg?style=social
 [github-watch]: https://github.com/prettier/prettier-eslint-cli/watchers
 [github-star-badge]: https://img.shields.io/github/stars/prettier/prettier-eslint-cli.svg?style=social

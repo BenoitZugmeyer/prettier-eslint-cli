@@ -1,0 +1,9 @@
+{
+  "extends": "@1stg/tsconfig/nodenext",
+  "compilerOptions": {
+    "importHelpers": false,
+    "noEmit": true,
+    "types": ["node", "vitest/globals"]
+  },
+  "exclude": ["coverage", "dist", "node_modules"]
+}
